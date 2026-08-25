@@ -3,848 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canine Epilepsy — A Field Guide</title>
+<title>Projects</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EDEFE9;
-    --paper-2:#E3E6DD;
-    --ink:#182524;
-    --ink-soft:#3E4C4A;
-    --line:#C7CCBC;
-    --spike:#E2A73E;     /* generalized / grand mal */
-    --spike-deep:#B9822A;
-    --focal:#8B4A66;     /* focal seizures */
-    --calm:#3F6E64;      /* baseline / management / calm */
-    --calm-deep:#2C4F47;
-    --warn-bg:#F4E3D6;
-    --warn-line:#C97A3E;
-    --danger:#8C3B2E;
+    --paper:#F2EFE8;
+    --paper-2:#E8E4D9;
+    --ink:#20232B;
+    --ink-soft:#585B60;
+    --line:#D2CDBE;
+    --accent:#2F5D8A;
+    --accent-deep:#20456B;
   }
-
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
+    min-height:100vh;
     background:var(--paper);
     color:var(--ink);
     font-family:'Inter',sans-serif;
-    font-size:16px;
-    line-height:1.6;
+    line-height:1.55;
+    display:flex;
+    flex-direction:column;
   }
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
-  }
-
-  h1,h2,h3,h4{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    line-height:1.1;
-    margin:0 0 0.4em 0;
-    letter-spacing:-0.01em;
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
   }
   a{color:inherit;}
   .mono{font-family:'IBM Plex Mono',monospace;}
 
-  /* ---------- layout shell ---------- */
-  .shell{
-    display:grid;
-    grid-template-columns:230px 1fr;
-    max-width:1280px;
+  .wrap{
+    max-width:760px;
     margin:0 auto;
+    padding:5.5rem 1.5rem 3rem 1.5rem;
+    flex:1;
+    width:100%;
   }
-  @media (max-width:900px){
-    .shell{grid-template-columns:1fr;}
-  }
+  @media (max-width:600px){.wrap{padding:3.4rem 1.2rem 2.5rem 1.2rem;}}
 
-  /* ---------- side nav ---------- */
-  nav.rail{
-    position:sticky;
-    top:0;
-    height:100vh;
-    padding:2.2rem 0 2rem 2.2rem;
-    display:flex;
-    flex-direction:column;
-    justify-self:start;
-  }
-  @media (max-width:900px){
-    nav.rail{
-      position:static;
-      height:auto;
-      padding:1.4rem 1.4rem 0 1.4rem;
-    }
-  }
-  .rail-mark{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:1.05rem;
-    margin-bottom:2rem;
-    letter-spacing:-0.01em;
-  }
-  .rail-mark .dot{color:var(--spike);}
-  .rail ol{
-    list-style:none;
-    margin:0; padding:0;
-    counter-reset:sec;
-    font-size:0.86rem;
-  }
-  .rail li{counter-increment:sec;}
-  .rail a{
-    display:flex;
-    gap:0.6em;
-    align-items:baseline;
-    text-decoration:none;
-    color:var(--ink-soft);
-    padding:0.42rem 0;
-    border-left:2px solid transparent;
-    padding-left:0.8rem;
-    margin-left:-0.8rem;
-    transition:color .15s, border-color .15s;
-  }
-  .rail a::before{
-    content:counter(sec,decimal-leading-zero);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.72rem;
-    color:var(--line);
-  }
-  .rail a:hover,.rail a.active{
-    color:var(--ink);
-    border-left-color:var(--spike);
-  }
-  .rail a.active::before{color:var(--spike-deep);}
-  .rail-foot{
-    margin-top:auto;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    padding-top:1.5rem;
-    max-width:190px;
-  }
-
-  /* ---------- main column ---------- */
-  main{padding:0 3rem 4rem 3rem;}
-  @media (max-width:900px){main{padding:0 1.4rem 3rem 1.4rem;}}
-
-  section{padding-top:3.6rem; scroll-margin-top:1.2rem;}
-  section + section{border-top:1px solid var(--line);}
-
+  header{margin-bottom:3.2rem;}
   .eyebrow{
     font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem;
+    color:var(--accent-deep);
     text-transform:uppercase;
-    letter-spacing:0.09em;
-    font-size:0.72rem;
-    color:var(--calm-deep);
-    margin-bottom:0.7rem;
-    display:block;
-  }
-  h2.title{font-size:clamp(1.7rem,3vw,2.3rem); max-width:20ch;}
-  p.lede{font-size:1.08rem; color:var(--ink-soft); max-width:62ch;}
-  p{max-width:70ch;}
-
-  /* ---------- hero ---------- */
-  .hero{
-    padding:3.2rem 0 2.2rem 0;
-    border-top:none !important;
-  }
-  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:2.5rem; align-items:end;}
-  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
-  .hero h1{font-size:clamp(2.3rem,5vw,3.6rem); max-width:11ch;}
-  .hero .sub{font-size:1.1rem; color:var(--ink-soft); max-width:44ch; margin-top:0.8rem;}
-  .trace-box{
-    background:var(--ink);
-    border-radius:6px;
-    padding:1.2rem 1.2rem 0.9rem 1.2rem;
-    color:var(--paper);
-  }
-  .trace-box svg{width:100%; height:auto; display:block;}
-  .trace-label{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
-    color:#9FB0AB; margin-top:0.6rem; text-transform:uppercase; letter-spacing:0.06em;
-  }
-  .trace-label b{color:var(--spike); font-weight:600;}
-
-  .disclaimer{
-    margin-top:2.2rem;
-    border-left:3px solid var(--danger);
-    background:var(--warn-bg);
-    padding:0.9rem 1.1rem;
-    font-size:0.88rem;
-    color:#4a2a20;
-    max-width:70ch;
-    border-radius:0 4px 4px 0;
-  }
-  .disclaimer strong{color:var(--danger);}
-
-  /* ---------- seizure type cards ---------- */
-  .type-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:1.6rem;
-    margin-top:2rem;
-  }
-  @media (max-width:760px){.type-grid{grid-template-columns:1fr;}}
-  .type-card{
-    background:var(--paper-2);
-    border-radius:8px;
-    padding:1.5rem 1.5rem 1.6rem 1.5rem;
-    border-top:3px solid var(--spike);
-  }
-  .type-card.focal{border-top-color:var(--focal);}
-  .type-card h3{font-size:1.25rem;}
-  .type-card svg{width:100%; height:60px; margin:0.9rem 0 1rem 0;}
-  .type-card ul{margin:0.6rem 0 0 0; padding-left:1.1rem; font-size:0.94rem; color:var(--ink-soft);}
-  .type-card li{margin-bottom:0.35rem;}
-  .phase-strip{
-    display:flex; gap:0.4rem; margin-top:1.1rem; flex-wrap:wrap;
-  }
-  .phase{
-    font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
-    background:var(--paper); padding:0.25rem 0.55rem; border-radius:20px;
-    border:1px solid var(--line); color:var(--ink-soft);
-  }
-
-  /* ---------- tables ---------- */
-  .table-wrap{overflow-x:auto; margin-top:1.6rem; border:1px solid var(--line); border-radius:8px;}
-  table{border-collapse:collapse; width:100%; font-size:0.88rem; min-width:640px;}
-  thead th{
-    text-align:left; font-family:'IBM Plex Mono',monospace; font-weight:500;
-    font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em;
-    color:var(--calm-deep); background:var(--paper-2);
-    padding:0.7rem 0.9rem; border-bottom:1px solid var(--line);
-  }
-  tbody td{padding:0.75rem 0.9rem; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft);}
-  tbody tr:last-child td{border-bottom:none;}
-  tbody td:first-child{color:var(--ink); font-weight:600; white-space:nowrap;}
-  tbody tr:hover{background:rgba(63,110,100,0.06);}
-
-  /* ---------- diet spotlight ---------- */
-  .diet-spotlight{
-    margin-top:2rem;
-    background:#fff;
-    border:1px solid var(--line);
-    border-top:3px solid var(--calm);
-    border-radius:8px;
-    padding:1.8rem 1.9rem 2rem 1.9rem;
-  }
-  .diet-spotlight .card-grid{margin-top:1rem;}
-
-  /* ---------- temperature scale ---------- */
-  .temp-scale{margin-top:2.2rem;}
-  .temp-bar{
-    display:flex; width:100%; height:2.2rem; border-radius:6px; overflow:hidden;
-    font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:#fff;
-  }
-  .temp-bar span{display:flex; align-items:center; justify-content:center; white-space:nowrap; padding:0 0.4rem;}
-  .temp-seg-low{background:#7C9885; flex:1.2;}
-  .temp-seg-normal{background:var(--calm); flex:1.6;}
-  .temp-seg-elevated{background:var(--spike-deep); flex:1;}
-  .temp-seg-severe{background:var(--warn-line); flex:1.3;}
-  .temp-seg-critical{background:var(--danger); flex:1.4;}
-  .temp-labels{
-    display:flex; margin-top:0.5rem; font-size:0.76rem; color:var(--ink-soft);
-  }
-  .temp-labels div{flex:1; }
-  .temp-labels .l1{flex:1.2;} .temp-labels .l2{flex:1.6;} .temp-labels .l3{flex:1;} .temp-labels .l4{flex:1.3;} .temp-labels .l5{flex:1.4;}
-
-  /* ---------- alt treatment / theory cards ---------- */
-  .card-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:1.3rem;
-    margin-top:1.8rem;
-  }
-  @media (max-width:760px){.card-grid{grid-template-columns:1fr;}}
-  .card{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:1.3rem 1.4rem;
-  }
-  .card h4{font-size:1.02rem; margin-bottom:0.5rem;}
-  .card p{font-size:0.9rem; color:var(--ink-soft); margin:0;}
-  .tag{
+    letter-spacing:0.08em;
     display:inline-block;
+    margin-bottom:1rem;
+  }
+  h1{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:clamp(2.1rem,5vw,3rem);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 0.9rem 0;
+  }
+  header p{
+    max-width:52ch;
+    color:var(--ink-soft);
+    font-size:1.04rem;
+    margin:0;
+  }
+
+  .listing{
+    display:flex;
+    flex-direction:column;
+  }
+  .entry{
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    padding:1.9rem 0;
+    border-top:1px solid var(--line);
+    position:relative;
+  }
+  .listing .entry:last-child{border-bottom:1px solid var(--line);}
+  .entry-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:1rem;
+  }
+  .entry-path{
     font-family:'IBM Plex Mono',monospace;
-    font-size:0.64rem;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+  .entry-arrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.9rem;
+    color:var(--accent);
+    display:inline-block;
+    transition:transform .18s ease;
+    flex:none;
+  }
+  .entry:hover .entry-arrow{transform:translateX(4px);}
+  .entry:focus-visible{outline:2px solid var(--accent); outline-offset:6px; border-radius:4px;}
+  .entry h2{
+    font-family:'Newsreader',serif;
+    font-weight:500;
+    font-size:1.5rem;
+    margin:0.5rem 0 0.5rem 0;
+    letter-spacing:-0.01em;
+  }
+  .entry:hover h2{color:var(--accent-deep);}
+  .entry p{
+    margin:0;
+    max-width:56ch;
+    color:var(--ink-soft);
+    font-size:0.96rem;
+  }
+  .tag-row{margin-top:0.9rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
+  .pill{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
     text-transform:uppercase;
     letter-spacing:0.05em;
-    padding:0.15rem 0.5rem;
+    padding:0.2rem 0.55rem;
     border-radius:20px;
-    margin-bottom:0.6rem;
+    background:var(--paper-2);
+    color:var(--ink-soft);
+    border:1px solid var(--line);
   }
-  .tag.evidence-strong{background:#DCE8E2; color:var(--calm-deep);}
-  .tag.evidence-emerging{background:#F1E2E8; color:var(--focal);}
-  .tag.evidence-mixed{background:var(--warn-bg); color:var(--warn-line);}
-
-  /* ---------- tracker / app section ---------- */
-  .track-cols{display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:1.8rem;}
-  @media (max-width:800px){.track-cols{grid-template-columns:1fr;}}
-  .log-sheet{
-    background:var(--ink);
-    color:var(--paper);
-    border-radius:8px;
-    padding:1.4rem 1.5rem;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.82rem;
-  }
-  .log-sheet .field{display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px dashed #3c4a48;}
-  .log-sheet .field:last-child{border-bottom:none;}
-  .log-sheet .field span:first-child{color:#9FB0AB;}
-  .app-list{display:flex; flex-direction:column; gap:0.9rem;}
-  .app{
-    display:flex; gap:0.9rem; align-items:flex-start;
-    background:var(--paper-2); border-radius:8px; padding:0.9rem 1.1rem;
-  }
-  .app-mark{
-    width:2.1rem; height:2.1rem; border-radius:6px; flex:none;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces',serif; font-weight:600; font-size:0.95rem;
-    color:#fff; background:var(--calm);
-  }
-  .app h4{font-size:0.95rem; margin-bottom:0.15rem;}
-  .app p{font-size:0.84rem; color:var(--ink-soft); margin:0;}
-
-  /* ---------- comorbidity list ---------- */
-  .como-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin-top:1.8rem;}
-  @media (max-width:900px){.como-grid{grid-template-columns:repeat(2,1fr);}}
-  @media (max-width:600px){.como-grid{grid-template-columns:1fr;}}
-  .como{
-    border:1px solid var(--line); border-radius:8px; padding:1.1rem 1.2rem; background:#fff;
-  }
-  .como .num{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--line); display:block; margin-bottom:0.4rem;}
-  .como h4{font-size:0.98rem; margin-bottom:0.4rem;}
-  .como p{font-size:0.85rem; color:var(--ink-soft); margin:0;}
-
-  /* ---------- contraindication section ---------- */
-  .risk-band{
-    display:flex; align-items:center; gap:0.6rem;
-    background:var(--danger); color:#fff;
-    padding:0.7rem 1rem; border-radius:6px; font-size:0.88rem; margin-top:1.6rem;
-  }
-  .risk-band b{font-family:'IBM Plex Mono',monospace; text-transform:uppercase; font-size:0.7rem; letter-spacing:0.05em;}
 
   footer{
-    padding:2.6rem 0 3.5rem 0;
-    font-size:0.82rem;
+    padding:1.6rem 1.5rem 2.2rem 1.5rem;
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.74rem;
     color:var(--ink-soft);
-    border-top:1px solid var(--line);
   }
-  footer .sources{margin-top:1rem; font-size:0.78rem; columns:2; column-gap:2rem;}
-  @media (max-width:700px){footer .sources{columns:1;}}
-  footer .sources li{margin-bottom:0.3rem; break-inside:avoid;}
 
-  ::selection{background:var(--spike); color:var(--ink);}
+  ::selection{background:var(--accent); color:#fff;}
 </style>
 </head>
 <body>
 
-<div class="shell">
-  <nav class="rail" id="rail">
-    <div class="rail-mark">Canine<br>Epilepsy<span class="dot">.</span></div>
-    <ol id="railList">
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#first-seizure">The first-seizure question</a></li>
-      <li><a href="#types">Seizure types</a></li>
-      <li><a href="#treatments">Conventional care</a></li>
-      <li><a href="#alt">Alternative &amp; adjunct</a></li>
-      <li><a href="#theories">Emerging theories</a></li>
-      <li><a href="#tracking">Tracking seizures</a></li>
-      <li><a href="#comorbid">Comorbidities</a></li>
-      <li><a href="#contra">What to avoid</a></li>
-    </ol>
-    <div class="rail-foot">A reference for owners, written alongside veterinary sources. Not a substitute for your vet.</div>
-  </nav>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">~/ index</span>
+      <h1>A couple of things I've built.</h1>
+      <p>Small self-contained projects, written up and put here so they're easy to find and easy to share.</p>
+    </header>
 
-  <main>
+    <div class="listing">
+      <a class="entry" href="canine-epilepsy-guide.html">
+        <div class="entry-top">
+          <span class="entry-path mono">/canine-epilepsy-guide.html</span>
+          <span class="entry-arrow mono">&rarr;</span>
+        </div>
+        <h2>Canine Epilepsy — A Field Guide</h2>
+        <p>A reference for dog owners covering seizure types, conventional and alternative treatments, emerging research, seizure tracking, comorbidities, and medications to avoid.</p>
+        <div class="tag-row">
+          <span class="pill">Reference site</span>
+          <span class="pill">Veterinary</span>
+        </div>
+      </a>
 
-    <section class="hero" id="top">
-      <div class="hero-grid">
-        <div>
-          <span class="eyebrow">A field guide for owners</span>
-          <h1>The electrical<br>storm, explained.</h1>
-          <p class="sub">Epilepsy is the most common chronic neurological condition in dogs. This guide walks through how seizures are classified, what treats them, what's still theory, and how to keep the record your vet actually needs.</p>
+      <a class="entry" href="git-explained.html">
+        <div class="entry-top">
+          <span class="entry-path mono">/git-explained.html</span>
+          <span class="entry-arrow mono">&rarr;</span>
         </div>
-        <div class="trace-box">
-          <svg viewBox="0 0 480 120" preserveAspectRatio="none">
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.6"
-              points="0,60 40,60 46,55 52,64 58,60 100,60 104,58 108,62 112,60 160,60 166,52 172,68 178,60 230,60"/>
-            <polyline fill="none" stroke="#E2A73E" stroke-width="2"
-              points="230,60 236,60 240,8 244,112 248,20 252,100 256,40 260,60 264,60 300,60"/>
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.6"
-              points="300,60 340,60 346,54 352,66 358,60 400,60 404,57 408,63 412,60 480,60"/>
-          </svg>
-          <div class="trace-label"><span>Baseline activity</span><b>Generalized event</b><span>Post-ictal</span></div>
+        <h2>Git, Explained</h2>
+        <p>A plain-language walkthrough of how Git actually works — for anyone who wants the concepts to click, not just the commands to memorize.</p>
+        <div class="tag-row">
+          <span class="pill">Explainer</span>
+          <span class="pill">Version control</span>
         </div>
-      </div>
-      <div class="disclaimer"><strong>Before anything else:</strong> this page is educational, not diagnostic or prescriptive. Never start, stop, or change an anticonvulsant, diet, or supplement without your veterinarian or a veterinary neurologist — abrupt changes to seizure medication can themselves trigger dangerous breakthrough seizures.</div>
-    </section>
+      </a>
+    </div>
+  </div>
 
-    <section id="overview">
-      <span class="eyebrow">01 · Overview</span>
-      <h2 class="title">What "epilepsy" actually covers</h2>
-      <p class="lede">Epilepsy isn't one disease — it's a tendency toward recurrent, unprovoked seizures, and vets sort the cause into three buckets before deciding on treatment.</p>
-      <div class="card-grid" style="margin-top:2rem;">
-        <div class="card">
-          <span class="tag evidence-strong">Most common</span>
-          <h4>Idiopathic epilepsy</h4>
-          <p>No structural cause is found on bloodwork or imaging; a genetic or inherited basis is suspected and confirmed in several breeds (Border Collie, Belgian Shepherd, Australian Shepherd, Labrador, Beagle, among others). Onset typically falls between 6 months and 6 years of age.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-mixed">Structural</span>
-          <h4>Structural epilepsy</h4>
-          <p>Seizures arise from identifiable brain disease — a tumor, prior trauma, stroke, malformation, or inflammatory/infectious encephalitis. More likely when seizures start outside the typical idiopathic age window, or when neurological exam findings are abnormal between seizures.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-mixed">Reactive</span>
-          <h4>Reactive seizures</h4>
-          <p>The brain itself is normal but is reacting to a metabolic derangement — low blood sugar, liver shunt/failure, kidney disease, electrolyte imbalance, or a toxin. Treating the underlying problem, not an anticonvulsant, is the fix here.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-strong">Diagnosis of exclusion</span>
-          <h4>How vets sort it out</h4>
-          <p>Bloodwork and often bile acids rule out reactive causes; MRI and spinal-fluid analysis look for structural disease. Idiopathic epilepsy is diagnosed when a dog fits the typical signalment and everything else comes back clean.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="first-seizure">
-      <span class="eyebrow">02 · The first-seizure question</span>
-      <h2 class="title">One seizure: watch, or start treatment?</h2>
-      <p class="lede">A single, brief seizure doesn't automatically mean a lifetime of daily medication. The decision to start — or to taper off later — follows its own logic, separate from diagnosing the seizure itself.</p>
-      <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:0.6rem;"><span class="mono" style="font-weight:600; color:var(--ink);">ASD</span> — antiseizure drug (also called an anticonvulsant or antiepileptic drug/AED): any daily medication used to prevent seizures from occurring, as opposed to a rescue medication used to stop one already in progress.</p>
-      <div class="card-grid" style="margin-top:2rem;">
-        <div class="card">
-          <span class="tag evidence-strong">Common default</span>
-          <h4>"Wait and watch" after one event</h4>
-          <p>Consensus guidance for dogs, extrapolated from strong human evidence, finds no proven long-term benefit to starting daily anticonvulsants after a single unprovoked seizure — dogs who wait tend to reach the same long-term seizure control as dogs treated immediately. Most vets hold off starting a daily ASD and instead ask you to keep a careful log (see the tracking section) to see whether it recurs.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-mixed">Tips the scale toward treating now</span>
-          <h4>When vets start sooner</h4>
-          <p>Immediate treatment is favored if the first event was already a cluster (more than one seizure in 24 hours) or status epilepticus, if imaging shows structural brain disease, if seizures are closely spaced from the start, or if the dog's history and exam suggest a more aggressive course. These raise the odds that waiting costs more than it saves.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-emerging">A different question entirely</span>
-          <h4>Tapering doesn't "confirm" a diagnosis</h4>
-          <p>Weaning a dog off an ASD is sometimes considered later in the course of disease — typically only after a long seizure-free stretch (often a year or more), to check whether medication is still needed or whether an underlying reactive cause has resolved. It isn't a diagnostic shortcut for a single early event: stopping a drug to "see if it comes back" right after one seizure isn't how epilepsy is confirmed, and it introduces a real risk that a wait-and-watch approach without medication doesn't have.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-strong">How tapering is actually done</span>
-          <h4>Slow, planned, and supervised</h4>
-          <p>When a taper is appropriate, it's done gradually over weeks to months, with your vet adjusting the schedule and watching for any return of seizure activity along the way — never stopped abruptly. This applies whether the goal is confirming ongoing need or simply reducing drug burden after a long stable stretch.</p>
-        </div>
-      </div>
-      <div class="risk-band"><b>Why this matters</b>&nbsp; Suddenly stopping or rapidly lowering phenobarbital or potassium bromide can trigger withdrawal seizures or status epilepticus — sometimes worse than the disease being managed. Any taper, for any reason, should be planned and monitored by your vet, never done on your own timeline.</div>
-      <p style="margin-top:1.2rem; font-size:0.9rem; color:var(--ink-soft);">Before starting any taper, ask your vet about a rescue medication plan (such as at-home rectal or intranasal benzodiazepines) in case a breakthrough seizure happens while the dose is being lowered — having that plan in hand before you start, not after, means you're not scrambling mid-taper if one occurs.</p>
-    </section>
-
-    <section id="types">
-      <span class="eyebrow">03 · Seizure types</span>
-      <h2 class="title">Generalized vs. focal — reading the trace</h2>
-      <p class="lede">Vets classify by how much of the brain is involved at onset. That distinction changes what a seizure looks like, what it might mean, and sometimes which drugs work best.</p>
-
-      <div class="type-grid">
-        <div class="type-card">
-          <h3>Generalized (grand mal / tonic-clonic)</h3>
-          <svg viewBox="0 0 300 60" preserveAspectRatio="none">
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.4" points="0,30 40,30"/>
-            <polyline fill="none" stroke="#E2A73E" stroke-width="2" points="40,30 44,30 48,4 52,56 56,8 60,50 64,16 68,44 72,22 76,38 80,30 84,30"/>
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.4" points="84,30 300,30"/>
-          </svg>
-          <p style="font-size:0.94rem; color:var(--ink-soft); margin-top:0.2rem;">Both cerebral hemispheres are involved from the start. This is the seizure most owners picture and the one that's easiest to recognize.</p>
-          <ul>
-            <li>Loss of consciousness, the dog collapses onto its side</li>
-            <li>Stiffening (tonic phase) followed by paddling/jerking limbs (clonic phase)</li>
-            <li>Drooling, chomping, sometimes loss of bladder or bowel control</li>
-            <li>Usually lasts under 2 minutes; anything past 5 minutes is an emergency (status epilepticus)</li>
-          </ul>
-          <div class="phase-strip">
-            <span class="phase">aura</span>
-            <span class="phase">ictus (the event)</span>
-            <span class="phase">post-ictal (mins–24h)</span>
-          </div>
-        </div>
-
-        <div class="type-card focal">
-          <h3>Focal (partial) seizures</h3>
-          <svg viewBox="0 0 300 60" preserveAspectRatio="none">
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.4" points="0,30 110,30"/>
-            <polyline fill="none" stroke="#8B4A66" stroke-width="2" points="110,30 116,30 120,16 124,40 128,22 132,30 138,30"/>
-            <polyline fill="none" stroke="#5C7A72" stroke-width="1.4" points="138,30 300,30"/>
-          </svg>
-          <p style="font-size:0.94rem; color:var(--ink-soft); margin-top:0.2rem;">Only one part of the brain fires. Signs are localized and easy to miss, mistake for behavior, or write off as "weird" — which is exactly why they're under-reported.</p>
-          <ul>
-            <li>Facial twitching, one limb jerking, or repetitive blinking</li>
-            <li>Odd, sudden behavior: fly-snapping, air-licking, unexplained fear or aggression</li>
-            <li>Dog often stays conscious and aware throughout</li>
-            <li>Can stay focal, or "spread" into a secondarily generalized seizure</li>
-          </ul>
-          <div class="phase-strip">
-            <span class="phase">simple: awareness intact</span>
-            <span class="phase">complex: awareness impaired</span>
-          </div>
-        </div>
-      </div>
-      <p style="margin-top:1.6rem; font-size:0.92rem; color:var(--ink-soft);">A video clip of an actual event is worth more to your vet than any description — see the tracking section below for what to capture.</p>
-
-      <div class="temp-scale">
-        <h3 style="font-size:1.1rem; margin-bottom:0.4rem;">Body temperature during a seizure</h3>
-        <p style="font-size:0.92rem; color:var(--ink-soft); max-width:66ch;">The muscle activity of a generalized seizure generates heat the same way hard exercise does. A single brief seizure rarely pushes temperature into dangerous territory, but prolonged seizures, cluster seizures, or status epilepticus can drive it up fast — and the resulting hyperthermia becomes its own emergency on top of the seizure itself.</p>
-        <div class="temp-bar">
-          <span class="temp-seg-low">Low</span>
-          <span class="temp-seg-normal">Normal</span>
-          <span class="temp-seg-elevated">Elevated</span>
-          <span class="temp-seg-severe">Severe</span>
-          <span class="temp-seg-critical">Critical</span>
-        </div>
-        <div class="temp-labels">
-          <div class="l1">&lt;100°F<br>(&lt;37.8°C)</div>
-          <div class="l2">100–102.5°F<br>(37.8–39.2°C)</div>
-          <div class="l3">102.5–104°F<br>(39.2–40°C)</div>
-          <div class="l4">104–106°F<br>(40–41°C)</div>
-          <div class="l5">&gt;106°F<br>(&gt;41°C)</div>
-        </div>
-        <p style="font-size:0.88rem; color:var(--ink-soft); margin-top:0.9rem;"><b style="color:var(--ink);">Normal</b> is a dog's ordinary resting range. <b style="color:var(--ink);">Elevated</b> is where prolonged muscle activity from a seizure commonly lands first — worth watching, not yet an emergency on its own. <b style="color:var(--ink);">Severe</b> is heatstroke territory: AAHA defines heatstroke as body temperature rising to dangerous levels, usually above 104°F, which can progress to organ damage if not addressed. <b style="color:var(--ink);">Critical</b> (above roughly 106°F/41°C) is where the risk of damage to the gut, liver, kidneys, heart, and clotting system rises sharply, and where death becomes a real possibility — this is a "go to the ER now" temperature, not a "monitor at home" one.</p>
-        <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:0.6rem;">If cooling is started at home on the way to the vet, AAHA's guidance is to stop once the temperature comes down to about 103°F — cooling further than that risks an overcorrection into rebound hypothermia, so let the vet team take it from there.</p>
-      </div>
-    </section>
-
-    <section id="treatments">
-      <span class="eyebrow">04 · Conventional care</span>
-      <h2 class="title">The standard anticonvulsants</h2>
-      <p class="lede">Most dogs with idiopathic epilepsy are managed — not cured — with daily antiseizure drugs (ASDs), chosen by efficacy, side-effect profile, and how easily blood levels can be monitored.</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Drug</th><th>Role</th><th>What owners notice</th><th>Monitoring</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Phenobarbital</td>
-              <td>First-line; the most-prescribed ASD and among the best-studied</td>
-              <td>Increased thirst, appetite, and urination; sedation early on that usually eases</td>
-              <td>Blood levels + liver panel, typically checked periodically since the drug is processed by the liver</td>
-            </tr>
-            <tr>
-              <td>Potassium bromide</td>
-              <td>First-line, often paired with phenobarbital in harder-to-control cases</td>
-              <td>Sedation, wobbliness, increased thirst; takes months to reach steady levels</td>
-              <td>Blood bromide levels; caution with kidney disease and salt intake, which shift bromide levels</td>
-            </tr>
-            <tr>
-              <td>Levetiracetam (Keppra)</td>
-              <td>First-line or add-on; popular for a clean side-effect profile</td>
-              <td>Usually well tolerated; occasional mild sedation or GI upset</td>
-              <td>Given more often per day (immediate-release); levels can be checked but dosing is often clinical</td>
-            </tr>
-            <tr>
-              <td>Zonisamide</td>
-              <td>Add-on or alternative first-line, especially if phenobarbital isn't tolerated</td>
-              <td>Vomiting, wobbliness (ataxia); rare liver or kidney effects</td>
-              <td>Liver values; caution in breeds prone to sulfonamide sensitivity</td>
-            </tr>
-            <tr>
-              <td>Imepitoin</td>
-              <td>First-line option in some countries for milder, less-frequent seizures</td>
-              <td>Generally mild sedation; less liver burden than phenobarbital</td>
-              <td>No blood-level monitoring required, which is part of its appeal</td>
-            </tr>
-            <tr>
-              <td>Pregabalin / gabapentin</td>
-              <td>Add-on for dogs not fully controlled on a primary ASD</td>
-              <td>Sedation, wobbliness</td>
-              <td>Kidney function, since both are cleared renally</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="margin-top:1.4rem; font-size:0.9rem; color:var(--ink-soft);">Emergency care for cluster seizures or status epilepticus (rectal or intranasal diazepam/midazolam, or a hospital-administered constant-rate infusion) is planned in advance with your vet for dogs known to seize repeatedly in a short window.</p>
-    </section>
-
-    <section id="alt">
-      <span class="eyebrow">05 · Alternative &amp; adjunct approaches</span>
-      <h2 class="title">Complementary options, honestly labeled</h2>
-      <p class="lede">None of these replace an ASD in a dog that needs one. They're used alongside conventional treatment, and the evidence behind each varies a lot — labeled here so you can weigh it.</p>
-      <div class="diet-spotlight">
-        <span class="tag evidence-strong">Diet · closest look</span>
-        <h3 style="font-size:1.35rem; margin-top:0.3rem;">MCT &amp; ketogenic-style diets</h3>
-        <p style="max-width:66ch; color:var(--ink-soft);">Diets built around medium-chain triglycerides (MCTs) have the best clinical-trial support of any complementary approach for canine epilepsy, reducing seizure frequency in a meaningful share of dogs with drug-resistant idiopathic epilepsy. But "ketogenic" here is doing different work than it does on a human diet plan — and it's a different animal entirely from a bag of grain-free kibble.</p>
-
-        <h4 style="font-size:1rem; margin-top:1.6rem; margin-bottom:0.6rem;">Why it isn't "just grain-free"</h4>
-        <p style="max-width:66ch; color:var(--ink-soft); font-size:0.94rem;">Grain-free kibble swaps out grain for another starch — usually potato, pea, or lentil — but it isn't formulated to change how the body burns fuel. A true veterinary ketogenic/MCT diet is engineered specifically to shift metabolism toward ketone production, and does it through a very different fat, not just more of it.</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>What's structurally different</th><th>Standard grain-free kibble</th><th>Veterinary MCT / ketogenic diet</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>Fat source</td>
-                <td>Long-chain triglycerides (LCTs) from animal fat or plant oils — no special processing</td>
-                <td>A defined share of calories from medium-chain triglycerides (mainly C8 caprylic and C10 capric fats), often from coconut- or palm-derived oil, calibrated as a percentage of metabolic energy</td>
-              </tr>
-              <tr>
-                <td>Carbohydrate role</td>
-                <td>Grain is replaced with another starch; total carbohydrate load is often still moderate-to-high</td>
-                <td>Some formulations still run 50%+ carbohydrate — the anti-seizure effect comes from the MCT fraction specifically, not from a strict low-carb ratio the way human ketogenic diets work</td>
-              </tr>
-              <tr>
-                <td>How it reaches the liver</td>
-                <td>Digested and used like any other dietary fat</td>
-                <td>MCTs bypass the usual fat-digestion route (no bile or pancreatic enzyme dependence), going straight to the liver to be converted into ketone bodies</td>
-              </tr>
-              <tr>
-                <td>Design intent</td>
-                <td>General maintenance nutrition; "grain-free" is a marketing and ingredient choice, not a metabolic strategy</td>
-                <td>Purpose-built — either a complete therapeutic diet or a measured MCT oil added to a stable base diet, dosed and monitored as part of a treatment plan</td>
-              </tr>
-              <tr>
-                <td>Oversight</td>
-                <td>Sold over the counter with no veterinary involvement expected</td>
-                <td>Best introduced with veterinary guidance — bloodwork before and during the switch, since it changes fat metabolism significantly</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 style="font-size:1rem; margin-top:1.8rem; margin-bottom:0.6rem;">When it's a poor fit</h4>
-        <div class="risk-band" style="align-items:flex-start;"><b>Caution</b>&nbsp; A high-fat ketogenic or MCT diet is a relative or absolute poor fit for dogs with certain co-existing conditions — check with your vet before switching if your dog has any of the following.</div>
-        <div class="como-grid" style="margin-top:1.1rem;">
-          <div class="como"><span class="num">▲</span><h4>History of pancreatitis</h4><p>Higher dietary fat is a recognized trigger for pancreatitis flare-ups, and dogs on potassium bromide already carry extra pancreatitis risk — stacking both is a real concern.</p></div>
-          <div class="como"><span class="num">▲</span><h4>Hyperlipidemia</h4><p>Breeds prone to idiopathic high blood fats (Miniature Schnauzers, for instance) can see triglycerides climb further on a high-fat plan.</p></div>
-          <div class="como"><span class="num">▲</span><h4>Fat-intolerant GI disease</h4><p>Conditions like intestinal lymphangiectasia or chronic fat-sensitive GI disease tend to worsen with a higher fat load.</p></div>
-          <div class="como"><span class="num">▲</span><h4>Liver disease</h4><p>The liver does the work of turning MCTs into ketones — added metabolic burden isn't ideal on top of existing hepatic disease or phenobarbital's own liver effects.</p></div>
-          <div class="como"><span class="num">▲</span><h4>Obesity-prone dogs</h4><p>These diets are calorie-dense; dogs that gain weight easily need closer portion and weight monitoring if trying one.</p></div>
-        </div>
-
-        <h4 style="font-size:1rem; margin-top:1.8rem; margin-bottom:0.6rem;">If a full diet change isn't a good fit: alternatives</h4>
-        <p style="max-width:66ch; color:var(--ink-soft); font-size:0.94rem; margin-bottom:1rem;">A full therapeutic diet isn't the only way to get an MCT effect — smaller, more targeted options exist and are easier to back out of if they don't agree with your dog.</p>
-        <div class="card-grid">
-          <div class="card">
-            <span class="tag evidence-strong">Closest substitute</span>
-            <h4>MCT oil as an add-on supplement</h4>
-            <p>A clinical trial found a measured MCT oil supplement — added to a dog's existing stable diet at roughly 9% of daily metabolic energy — reduced seizure frequency without requiring a full diet switch. This keeps the therapeutic ingredient while sidestepping a bigger overall fat and calorie change.</p>
-          </div>
-          <div class="card">
-            <span class="tag evidence-mixed">Lower fat load</span>
-            <h4>Fish oil (omega-3)</h4>
-            <p>Doesn't drive ketosis the way MCTs do, but is a much lower-fat way to support general neurological and cardiac health if a high-fat diet is off the table. Confirm dosing with your vet, since fish oil affects clotting.</p>
-          </div>
-          <div class="card">
-            <span class="tag evidence-emerging">Supports fat metabolism</span>
-            <h4>L-carnitine</h4>
-            <p>Helps shuttle fatty acids into cells for energy use and has been studied alongside MCT supplementation; sometimes used to support metabolism in dogs where a bigger dietary fat shift isn't appropriate.</p>
-          </div>
-        </div>
-      </div>
-
-      <h3 style="font-size:1.1rem; margin-top:2.6rem; margin-bottom:0.4rem;">Other complementary approaches</h3>
-      <div class="card-grid">
-        <div class="card">
-          <span class="tag evidence-emerging">Cannabidiol</span>
-          <h4>CBD</h4>
-          <p>Small veterinary trials suggest CBD oil can reduce seizure frequency as an add-on in some dogs, though results are mixed and dosing isn't standardized. Quality and THC content vary enormously between products — a real safety issue if you're considering it, and one to raise with your vet rather than choose alone.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-mixed">Bodywork</span>
-          <h4>Acupuncture &amp; chiropractic</h4>
-          <p>Used by some integrative vets as an adjunct for general wellbeing and stress reduction. Evidence specific to seizure reduction in dogs is thin and largely anecdotal, though it's generally considered low-risk when performed by a credentialed veterinary practitioner.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-mixed">Nutraceuticals</span>
-          <h4>Omega-3 fatty acids &amp; taurine</h4>
-          <p>Proposed to support neuronal membrane stability; commonly added for general neurological and cardiac health. Not shown on their own to meaningfully reduce seizure frequency, but low-risk as a supporting supplement — confirm dosing with your vet since fish oil can interact with clotting.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="theories">
-      <span class="eyebrow">06 · Emerging theories</span>
-      <h2 class="title">Where the research is heading</h2>
-      <p class="lede">These aren't settled standards of care yet — they're active research directions worth knowing about, especially if your dog is drug-resistant.</p>
-      <div class="card-grid">
-        <div class="card">
-          <span class="tag evidence-emerging">Gut–brain axis</span>
-          <h4>The microbiome connection</h4>
-          <p>Studies comparing fecal bacteria in epileptic vs. non-epileptic dogs have found distinct baseline microbiome patterns, and ketogenic diets appear to shift that microbiome alongside their anti-seizure effect. It's an open question whether the microbiome is a cause, a marker, or a lever for future probiotic-style treatments.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-emerging">Precision dosing</span>
-          <h4>Pharmacokinetic modeling</h4>
-          <p>Newer population pharmacokinetic models aim to predict an individual dog's phenobarbital dose from weight and age up front, instead of a flat starting dose followed by trial-and-error blood draws — getting dogs to a therapeutic level faster and with fewer rechecks.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-emerging">Immune-mediated component</span>
-          <h4>Neuroinflammation</h4>
-          <p>Researchers are investigating whether ongoing immune activity in the brain contributes to some cases of drug-resistant epilepsy, which is prompting early exploratory interest in anti-inflammatory and immune-modulating adjuncts — still experimental, not a standard treatment.</p>
-        </div>
-        <div class="card">
-          <span class="tag evidence-strong">Wearables &amp; detection</span>
-          <h4>Automated seizure detection</h4>
-          <p>Collar-based sensors and phone-based accelerometer apps are being trialed to detect generalized tonic-clonic seizures in real time from movement signatures, aiming to catch nighttime or unwitnessed events and time-stamp them automatically for your vet.</p>
-          <p style="margin-top:0.7rem; padding-top:0.7rem; border-top:1px dashed var(--line); font-size:0.87rem;"><b>Not built for focal seizures:</b> these devices work by detecting the vibration and movement pattern of convulsive activity. A focal seizure — facial twitching, a single limb, or an odd behavioral episode — often doesn't produce enough motion for the sensor to register, so a "quiet" collar reading doesn't rule one out. They're a supplement to watching your dog, not a replacement for it.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="tracking">
-      <span class="eyebrow">07 · Tracking seizures</span>
-      <h2 class="title">The record your vet actually needs</h2>
-      <p class="lede">Treatment decisions hinge on frequency and pattern, not memory. A consistent log turns "he's been having more lately" into an actual trend line.</p>
-      <div class="track-cols">
-        <div>
-          <h4 style="font-size:1rem; margin-bottom:0.8rem;">What to log every time</h4>
-          <div class="log-sheet">
-            <div class="field"><span>date / time</span><span>—</span></div>
-            <div class="field"><span>duration</span><span>—</span></div>
-            <div class="field"><span>type</span><span>focal / generalized</span></div>
-            <div class="field"><span>trigger (if any)</span><span>—</span></div>
-            <div class="field"><span>pre-ictal signs</span><span>pacing, hiding, clinging</span></div>
-            <div class="field"><span>post-ictal duration</span><span>—</span></div>
-            <div class="field"><span>video captured</span><span>y / n</span></div>
-            <div class="field"><span>meds given &amp; time</span><span>—</span></div>
-          </div>
-          <p style="font-size:0.85rem; margin-top:1rem; color:var(--ink-soft);">Cluster seizures (more than one in 24 hours) and any seizure lasting over 5 minutes are emergencies — call your vet or an emergency clinic immediately rather than finishing the log first.</p>
-        </div>
-        <div>
-          <h4 style="font-size:1rem; margin-bottom:0.8rem;">Apps built for this</h4>
-          <div class="app-list">
-            <div class="app">
-              <div class="app-mark">R</div>
-              <div><h4>RVC Pet Epilepsy Tracker</h4><p>Free app from the Royal Veterinary College — seizure and medication logs, reminders, and an export you can email straight to your vet.</p></div>
-            </div>
-            <div class="app">
-              <div class="app-mark">S</div>
-              <div><h4>Safetail</h4><p>Seizure logging with video upload and a shareable dashboard your vet can follow between visits.</p></div>
-            </div>
-            <div class="app">
-              <div class="app-mark">M</div>
-              <div><h4>MediPaws</h4><p>Broader pet health tracker with a seizure module — timelines, medication reminders, and vet-ready PDF reports.</p></div>
-            </div>
-            <div class="app">
-              <div class="app-mark">P</div>
-              <div><h4>PetPace smart collar</h4><p>Wearable-based option in beta testing that aims to auto-detect seizure events from physiological signals rather than relying on you catching it. Like other motion-based detectors, it's built around generalized convulsive activity — it isn't a reliable way to catch focal seizures, which may not move the collar's sensors enough to register.</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="comorbid">
-      <span class="eyebrow">08 · Comorbidities</span>
-      <h2 class="title">What tends to travel with it</h2>
-      <p class="lede">Epilepsy rarely shows up alone. Some of the following come from the seizures themselves, some from the drugs used to control them.</p>
-      <div class="como-grid">
-        <div class="como"><span class="num">01</span><h4>Anxiety &amp; behavior change</h4><p>Increased fearfulness, noise sensitivity, or clinginess is common, and may relate to the seizures, the anticonvulsants, or both.</p></div>
-        <div class="como"><span class="num">02</span><h4>Cognitive changes</h4><p>Dogs with epilepsy, especially with frequent or severe seizures, appear more prone to cognitive decline over time.</p></div>
-        <div class="como"><span class="num">03</span><h4>Orthopedic injury</h4><p>Falls and disorientation during or after a seizure can cause bruising or, less often, more serious injury.</p></div>
-        <div class="como"><span class="num">04</span><h4>Liver stress</h4><p>Phenobarbital is processed by the liver and can elevate liver enzymes over time, which is why periodic bloodwork is standard.</p></div>
-        <div class="como"><span class="num">05</span><h4>Pancreatitis risk</h4><p>Potassium bromide has been linked to a higher risk of pancreatitis in some dogs, particularly alongside a fatty diet.</p></div>
-        <div class="como"><span class="num">06</span><h4>Weight gain</h4><p>Increased appetite from phenobarbital, combined with sedation-related lower activity, makes weight creep common.</p></div>
-        <div class="como"><span class="num">07</span><h4>GI upset</h4><p>Vomiting or reduced appetite shows up with several ASDs, particularly zonisamide, and usually needs dose or timing adjustment rather than stopping the drug.</p></div>
-        <div class="como"><span class="num">08</span><h4>Sedation &amp; ataxia</h4><p>Wobbliness and drowsiness are dose-related and often ease after the first few weeks as the dog adjusts.</p></div>
-      </div>
-    </section>
-
-    <section id="contra">
-      <span class="eyebrow">09 · What to avoid</span>
-      <h2 class="title">Contraindicated medications &amp; supplements</h2>
-      <p class="lede">Some drugs and supplements either lower the seizure threshold outright or interfere with how anticonvulsants are metabolized. Always tell every vet — including at the ER or groomer's flea/tick counter — that your dog has epilepsy.</p>
-      <div class="risk-band"><b>Flag this</b> Confirm any new medication or supplement with your prescribing vet before giving it, even something sold over the counter.</div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Substance</th><th>Category</th><th>Why it's a concern</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Tramadol</td>
-              <td>Pain medication</td>
-              <td>Recognized to lower the seizure threshold; generally avoided or used with extra caution in epileptic dogs.</td>
-            </tr>
-            <tr>
-              <td>Fluoroquinolone antibiotics</td>
-              <td>Antibiotic</td>
-              <td>Can lower seizure threshold, particularly at higher doses or in dogs with kidney impairment.</td>
-            </tr>
-            <tr>
-              <td>Certain isoxazoline flea/tick products (Bravecto, Nexgard, Simparica)</td>
-              <td>Parasite prevention</td>
-              <td>The FDA has flagged post-marketing reports of seizures and tremors in some dogs, including those with no prior seizure history; vets often weigh alternatives or extra caution in known epileptics.</td>
-            </tr>
-            <tr>
-              <td>High-dose ivermectin &amp; related macrocyclic lactones</td>
-              <td>Antiparasitic</td>
-              <td>Neurotoxic at high doses, especially in dogs with the MDR1 (ABCB1) gene mutation common in herding breeds — a risk independent of epilepsy but compounded by it.</td>
-            </tr>
-            <tr>
-              <td>Metronidazole (high dose / prolonged use)</td>
-              <td>Antibiotic/antiprotozoal</td>
-              <td>Linked to neurotoxicity at higher doses, which can look like or worsen seizure activity.</td>
-            </tr>
-            <tr>
-              <td>Acepromazine</td>
-              <td>Sedative</td>
-              <td>Historically avoided in epileptic dogs on a theoretical seizure-threshold concern; many neurologists now consider low doses reasonably safe, but it's a "check with your vet first" drug.</td>
-            </tr>
-            <tr>
-              <td>Ginkgo biloba, evening primrose oil, borage oil</td>
-              <td>Herbal supplement</td>
-              <td>Contain compounds associated with lowering seizure threshold in some reports; generally avoided in epileptic dogs.</td>
-            </tr>
-            <tr>
-              <td>Ephedra / ma huang, and other stimulant herbal blends</td>
-              <td>Herbal stimulant</td>
-              <td>Stimulant herbs can provoke seizures outright and have no place in an epileptic dog's supplement routine.</td>
-            </tr>
-            <tr>
-              <td>Xylitol</td>
-              <td>Sweetener (toxin, not a treatment)</td>
-              <td>Causes a rapid blood sugar crash that can trigger seizures in any dog — worth flagging since it hides in peanut butter, gum, and "sugar-free" treats.</td>
-            </tr>
-            <tr>
-              <td>Grapefruit / grapefruit juice</td>
-              <td>Food</td>
-              <td>Affects the same liver enzyme pathway (CYP3A) used to clear several anticonvulsants, which can push blood drug levels higher than intended.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="margin-top:1.4rem; font-size:0.9rem; color:var(--ink-soft);">This list isn't exhaustive, and individual risk depends on the specific drug your dog is already taking — phenobarbital in particular alters the metabolism of many other medications in both directions. Always give your vet a full, current medication and supplement list.</p>
-    </section>
-
-    <footer>
-      <p>Written as a starting point for conversations with your veterinarian or veterinary neurologist — not a replacement for either. Treatment plans should always be built around your individual dog's bloodwork, imaging, and response to treatment.</p>
-      <ul class="sources">
-        <li>ACVIM consensus statement on seizure management in dogs</li>
-        <li>Merck Veterinary Manual — Anticonvulsants for Treatment of Animals</li>
-        <li>Journal of Veterinary Internal Medicine — levetiracetam &amp; phenobarbital pharmacokinetics studies</li>
-        <li>Frontiers in Veterinary Science — MCT ketogenic diet &amp; microbiome studies; app-based seizure detection trial</li>
-        <li>Veterinary Sciences — fecal microbiota in canine idiopathic epilepsy</li>
-        <li>Retrospective US primary-care study on canine idiopathic epilepsy prescribing (PMC)</li>
-        <li>Royal Veterinary College — Pet Epilepsy Tracker app</li>
-        <li>FDA veterinary post-marketing safety communications on isoxazoline flea/tick products</li>
-        <li>American Animal Hospital Association (AAHA) — Heatstroke in Pets: Signs, Risks, and What to Do</li>
-      </ul>
-    </footer>
-
-  </main>
-</div>
-
-<script>
-  // Scroll spy for the side rail
-  const links = Array.from(document.querySelectorAll('#railList a'));
-  const sections = links.map(a => document.querySelector(a.getAttribute('href')));
-  function onScroll(){
-    let idx = 0;
-    const y = window.scrollY + window.innerHeight * 0.3;
-    sections.forEach((sec, i) => { if(sec && sec.offsetTop <= y) idx = i; });
-    links.forEach((a,i) => a.classList.toggle('active', i === idx));
-  }
-  document.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('load', onScroll);
-</script>
+  <footer>hosted on GitHub Pages</footer>
 
 </body>
 </html>
