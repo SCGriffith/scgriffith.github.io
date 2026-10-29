@@ -1,185 +1,356 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projects</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheila Griffith | Data Analyst in Training</title>
+<meta name="description" content="Sheila Griffith, data analyst in training. Projects, skills, and visualizations for small business data.">
 <style>
-  :root{
-    --paper:#F2EFE8;
-    --paper-2:#E8E4D9;
-    --ink:#20232B;
-    --ink-soft:#585B60;
-    --line:#D2CDBE;
-    --accent:#2F5D8A;
-    --accent-deep:#20456B;
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #1d2433;
+    --muted: #5b6475;
+    --accent: #1f6feb;
+    --accent-soft: #e8f0fe;
+    --border: #e2e6ee;
+    --tag-bg: #f0f2f6;
+    --progress-bg: #fff4e0;
+    --progress-text: #8a5300;
+    --done-bg: #e6f6ec;
+    --done-text: #1d6b3a;
+    --shadow: 0 1px 2px rgba(16,24,40,.06), 0 4px 12px rgba(16,24,40,.06);
   }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    min-height:100vh;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    line-height:1.55;
-    display:flex;
-    flex-direction:column;
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1420;
+      --surface: #171e2d;
+      --text: #e8ecf4;
+      --muted: #a3adc2;
+      --accent: #6ea8ff;
+      --accent-soft: #1c2a44;
+      --border: #263047;
+      --tag-bg: #212a3d;
+      --progress-bg: #3a2e14;
+      --progress-text: #ffcf7a;
+      --done-bg: #143222;
+      --done-text: #7ee0a4;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+    }
   }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
-  }
-  a{color:inherit;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-
-  .wrap{
-    max-width:760px;
-    margin:0 auto;
-    padding:5.5rem 1.5rem 3rem 1.5rem;
-    flex:1;
-    width:100%;
-  }
-  @media (max-width:600px){.wrap{padding:3.4rem 1.2rem 2.5rem 1.2rem;}}
-
-  header{margin-bottom:3.2rem;}
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem;
-    color:var(--accent-deep);
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    display:inline-block;
-    margin-bottom:1rem;
-  }
-  h1{
-    font-family:'Newsreader',serif;
-    font-weight:500;
-    font-size:clamp(2.1rem,5vw,3rem);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    margin:0 0 0.9rem 0;
-  }
-  header p{
-    max-width:52ch;
-    color:var(--ink-soft);
-    font-size:1.04rem;
-    margin:0;
+  :root[data-theme="dark"] {
+    --bg: #0f1420;
+    --surface: #171e2d;
+    --text: #e8ecf4;
+    --muted: #a3adc2;
+    --accent: #6ea8ff;
+    --accent-soft: #1c2a44;
+    --border: #263047;
+    --tag-bg: #212a3d;
+    --progress-bg: #3a2e14;
+    --progress-text: #ffcf7a;
+    --done-bg: #143222;
+    --done-text: #7ee0a4;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
   }
 
-  .listing{
-    display:flex;
-    flex-direction:column;
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
-  .entry{
-    display:block;
-    text-decoration:none;
-    color:inherit;
-    padding:1.9rem 0;
-    border-top:1px solid var(--line);
-    position:relative;
-  }
-  .listing .entry:last-child{border-bottom:1px solid var(--line);}
-  .entry-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    gap:1rem;
-  }
-  .entry-path{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem;
-    color:var(--ink-soft);
-  }
-  .entry-arrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.9rem;
-    color:var(--accent);
-    display:inline-block;
-    transition:transform .18s ease;
-    flex:none;
-  }
-  .entry:hover .entry-arrow{transform:translateX(4px);}
-  .entry:focus-visible{outline:2px solid var(--accent); outline-offset:6px; border-radius:4px;}
-  .entry h2{
-    font-family:'Newsreader',serif;
-    font-weight:500;
-    font-size:1.5rem;
-    margin:0.5rem 0 0.5rem 0;
-    letter-spacing:-0.01em;
-  }
-  .entry:hover h2{color:var(--accent-deep);}
-  .entry p{
-    margin:0;
-    max-width:56ch;
-    color:var(--ink-soft);
-    font-size:0.96rem;
-  }
-  .tag-row{margin-top:0.9rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
-  .pill{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.68rem;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    padding:0.2rem 0.55rem;
-    border-radius:20px;
-    background:var(--paper-2);
-    color:var(--ink-soft);
-    border:1px solid var(--line);
-  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+  section { padding: 48px 0; }
+  h1, h2, h3 { line-height: 1.25; margin: 0 0 8px; }
+  h2 { font-size: 1.6rem; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+  .muted { color: var(--muted); }
 
-  footer{
-    padding:1.6rem 1.5rem 2.2rem 1.5rem;
-    text-align:center;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.74rem;
-    color:var(--ink-soft);
-  }
+  /* Header / nav */
+  header.site { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+  header.site .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 60px; gap: 12px; flex-wrap: wrap; }
+  .brand { font-weight: 700; color: var(--text); }
+  nav a { color: var(--muted); margin-left: 18px; font-size: .95rem; }
+  nav a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 560px) { nav a { margin-left: 12px; } }
 
-  ::selection{background:var(--accent); color:#fff;}
+  /* Hero */
+  .hero { padding: 64px 0 40px; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 2.8rem); }
+  .hero .lead { font-size: 1.15rem; color: var(--muted); max-width: 680px; }
+  .hero .cta { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-weight: 600; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn:hover { text-decoration: none; filter: brightness(.97); }
+
+  /* Cards */
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 20px; display: flex; flex-direction: column; }
+  .card h3 { font-size: 1.1rem; }
+  .card p { margin: 6px 0 12px; color: var(--muted); font-size: .95rem; }
+  .card .viz { border-radius: 8px; background: var(--accent-soft); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: .85rem; margin-bottom: 14px; overflow: hidden; }
+  .card .viz img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card .foot { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: space-between; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: var(--tag-bg); color: var(--muted); border-radius: 999px; padding: 2px 10px; font-size: .78rem; }
+  .status { border-radius: 999px; padding: 2px 10px; font-size: .78rem; font-weight: 600; }
+  .status.progress { background: var(--progress-bg); color: var(--progress-text); }
+  .status.done { background: var(--done-bg); color: var(--done-text); }
+  .card .links { margin-top: 12px; font-size: .92rem; }
+
+  /* Skills */
+  .skills { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 24px; }
+  .skill-card h3 { font-size: 1rem; margin-bottom: 10px; }
+  .skill-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .skill-list li { display: flex; flex-direction: column; gap: 4px; font-size: .95rem; }
+  .skill-list .bar { height: 6px; background: var(--tag-bg); border-radius: 999px; overflow: hidden; }
+  .skill-list .bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .skill-note { font-size: .85rem; color: var(--muted); margin-top: 12px; }
+
+  /* Timeline */
+  .timeline { margin-top: 24px; border-left: 2px solid var(--border); padding-left: 22px; }
+  .timeline .item { position: relative; margin-bottom: 26px; }
+  .timeline .item::before { content: ""; position: absolute; left: -29px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+  .timeline .item h3 { font-size: 1.05rem; }
+  .timeline .item .when { color: var(--muted); font-size: .9rem; }
+  .timeline .item p { margin: 6px 0 0; color: var(--muted); font-size: .95rem; }
+
+  /* About */
+  .about { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .about { grid-template-columns: 2fr 1fr; } }
+  .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); }
+  .contact-card a { display: block; margin: 8px 0; }
+
+  footer.site { border-top: 1px solid var(--border); padding: 24px 0; color: var(--muted); font-size: .9rem; background: var(--surface); }
 </style>
 </head>
 <body>
 
+<header class="site">
   <div class="wrap">
-    <header>
-      <span class="eyebrow">~/ index</span>
-      <h1>A couple of things I've built.</h1>
-      <p>Small self-contained projects, written up and put here so they're easy to find and easy to share.</p>
-    </header>
-
-    <div class="listing">
-      <a class="entry" href="canine-epilepsy-guide.html">
-        <div class="entry-top">
-          <span class="entry-path mono">/canine-epilepsy-guide.html</span>
-          <span class="entry-arrow mono">&rarr;</span>
-        </div>
-        <h2>Canine Epilepsy — A Field Guide</h2>
-        <p>A reference for dog owners covering seizure types, conventional and alternative treatments, emerging research, seizure tracking, comorbidities, and medications to avoid.</p>
-        <div class="tag-row">
-          <span class="pill">Reference site</span>
-          <span class="pill">Veterinary</span>
-        </div>
-      </a>
-
-      <a class="entry" href="git-explained.html">
-        <div class="entry-top">
-          <span class="entry-path mono">/git-explained.html</span>
-          <span class="entry-arrow mono">&rarr;</span>
-        </div>
-        <h2>Git, Explained</h2>
-        <p>A plain-language walkthrough of how Git actually works — for anyone who wants the concepts to click, not just the commands to memorize.</p>
-        <div class="tag-row">
-          <span class="pill">Explainer</span>
-          <span class="pill">Version control</span>
-        </div>
-      </a>
-    </div>
+    <a class="brand" href="#top">Sheila Griffith</a>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </div>
+</header>
 
-  <footer>hosted on GitHub Pages</footer>
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Data Analyst in Training</div>
+      <h1>Turning messy business data into clear decisions.</h1>
+      <p class="lead">Years of operations and client-facing experience, now building data analysis skills in Excel, Google Sheets, SQL, and Tableau. I focus on small business questions: where money is coming from, where it's being lost, and what to do about it.</p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">View projects</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="eyebrow">Selected work</div>
+      <h2>Projects</h2>
+      <p class="muted">Each project shows the question, the data, the tools, and what I found. Projects marked In progress are being updated as I learn more.</p>
+
+      <div class="grid">
+
+        <article class="card">
+          <div class="viz"><!-- Replace with a screenshot: <img src="images/dog-license.png" alt="Dog license dashboard"> -->Dashboard screenshot</div>
+          <h3>Allegheny County Dog License Data Cleaning</h3>
+          <p>Cleaning and organizing dog license records and building a dashboard for the County Treasurer's office.</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Data cleaning</span><span class="tag">Dashboard</span><span class="tag">Looker Studio</span></div>
+            <span class="status done">Complete</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="viz"><img src="images/tech-moms-demographics.png" alt="Tech-Moms leads and student demographics dashboard in Tableau"></div>
+          <h3>Tech-Moms Leads &amp; Student Demographics</h3>
+          <p>Analysis of lead and student demographics for the Tech-Moms program, built in Excel or Google Sheets, with an interactive Tableau Public dashboard.</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Excel</span><span class="tag">Tableau</span><span class="tag">Demographics</span></div>
+            <span class="status done">Complete</span>
+          </div>
+          <div class="links"><a href="https://public.tableau.com/app/profile/sheila.griffith/viz/Tech-Moms-Demographics/Dashboard2" target="_blank" rel="noopener">View interactive dashboard →</a></div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Analysis screenshot</div>
+          <h3>Airbnb Data Project</h3>
+          <p>An analysis project completed alongside an Alex the Analyst video.</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">SQL</span><span class="tag">Analysis</span></div>
+            <span class="status done">Complete</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Budget screenshot</div>
+          <h3>Personal Finance Analysis</h3>
+          <p>Household spending analysis in Excel, used to set realistic financial goals from actual data.</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Excel</span><span class="tag">Budgeting</span></div>
+            <span class="status progress">In progress</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Map screenshot</div>
+          <h3>World Findex Dashboard &amp; Data Story</h3>
+          <p>A worldwide map dashboard, followed by a data story based on what it shows.</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Tableau</span><span class="tag">Data story</span></div>
+            <span class="status progress">In progress</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Guide preview</div>
+          <h3>Canine Epilepsy Field Guide</h3>
+          <p>A reference guide for dog owners, written as I learn more through my own puppy's journey. Built with Claude (vibe coded).</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Web</span><span class="tag">GitHub Pages</span></div>
+            <span class="status progress">In progress</span>
+          </div>
+          <div class="links"><a href="https://scgriffith.github.io/canine-epilepsy-guide.html">Read the guide →</a></div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Guide preview</div>
+          <h3>Git, Explained</h3>
+          <p>A plain-language walkthrough of how Git works. Built with Claude (vibe coded).</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">Git</span><span class="tag">Version control</span></div>
+            <span class="status progress">In progress</span>
+          </div>
+          <div class="links"><a href="https://scgriffith.github.io/git-explained.html">Read the guide →</a></div>
+        </article>
+
+        <article class="card">
+          <div class="viz">Guide preview</div>
+          <h3>GitHub Study Guide</h3>
+          <p>A guide to working with GitHub repositories and Pages. Built with Claude (vibe coded).</p>
+          <div class="foot">
+            <div class="tags"><span class="tag">GitHub</span><span class="tag">Version control</span></div>
+            <span class="status progress">In progress</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="wrap">
+      <div class="eyebrow">Skills</div>
+      <h2>Tools &amp; expertise</h2>
+      <p class="muted">Bars show how far along I am with each tool. They're a snapshot, not a final rating, and I'll update them as I build.</p>
+
+      <div class="skills">
+        <div class="card skill-card">
+          <h3>Data Analytics Tools</h3>
+          <ul class="skill-list">
+            <li>Excel <div class="bar"><span style="width: 80%"></span></div></li>
+            <li>Google Sheets <div class="bar"><span style="width: 80%"></span></div></li>
+            <li>SQL <div class="bar"><span style="width: 45%"></span></div></li>
+            <li>Tableau <div class="bar"><span style="width: 55%"></span></div></li>
+            <li>Looker Studio <div class="bar"><span style="width: 60%"></span></div></li>
+          </ul>
+        </div>
+
+        <div class="card skill-card">
+          <h3>Finance &amp; Accounting</h3>
+          <ul class="skill-list">
+            <li>Bookkeeping <div class="bar"><span style="width: 75%"></span></div></li>
+            <li>Financial statements <div class="bar"><span style="width: 65%"></span></div></li>
+            <li>Expense analysis <div class="bar"><span style="width: 70%"></span></div></li>
+            <li>Cash flow <div class="bar"><span style="width: 60%"></span></div></li>
+            <li>Reconciliation <div class="bar"><span style="width: 65%"></span></div></li>
+          </ul>
+        </div>
+
+        <div class="card skill-card">
+          <h3>Credentials</h3>
+          <ul class="skill-list">
+            <li>Intuit Bookkeeping Certification <span class="muted" style="font-size:.85rem">Apr 2026</span></li>
+            <li>SQL course (Analyst Builder) <span class="muted" style="font-size:.85rem">Oct 2026</span></li>
+            <li>AI Builder Foundations (Leland) <span class="muted" style="font-size:.85rem">Sep 2026</span></li>
+            <li>Data Analysis &amp; AI Program (Tech-Moms) <span class="muted" style="font-size:.85rem">Nov 2026</span></li>
+            <li>Financial Accounting (UPenn) <span class="muted" style="font-size:.85rem">Nov 2026</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="eyebrow">Background</div>
+      <h2>Experience</h2>
+      <div class="timeline">
+        <div class="item">
+          <div class="when">2015 – Present</div>
+          <h3>Full-Time Caregiver &amp; Homeschool Educator</h3>
+          <p>Built tracking systems for three students' academic records, reusable resource boards, and household budgeting in Excel and Google Sheets.</p>
+        </div>
+        <div class="item">
+          <div class="when">Jan 2025 – Jan 2026</div>
+          <h3>Assistant Manager, Camp Bow Wow</h3>
+          <p>Cleaned CRM data so sales were reported in the correct categories, restructured invoice codes for profitability tracking, and redesigned the new client interview process.</p>
+        </div>
+        <div class="item">
+          <div class="when">Dec 2009 – Jul 2015</div>
+          <h3>Kennel Manager, VCA Old Trail Animal Hospital</h3>
+          <p>Built the tracking systems and client processes that grew annual kennel revenue by approximately 186%, and produced stay reports for owners from multi-source team data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="background: var(--surface); border-top: 1px solid var(--border);">
+    <div class="wrap about">
+      <div>
+        <div class="eyebrow">About</div>
+        <h2>How I work</h2>
+        <p>I've spent my career in operations, where I saw problems that the data could have explained. I'm now learning the tools to show that: cleaning messy records, building dashboards people can read, and turning findings into decisions a small business owner can act on.</p>
+        <p class="muted">I'm completing my Tech-Moms Data Analysis &amp; AI program in November 2026 and am looking for analyst roles and, later, freelance work with small businesses.</p>
+      </div>
+      <div class="contact-card" id="contact">
+        <h3>Contact</h3>
+        <a href="mailto:griffith.sheilac@gmail.com">griffith.sheilac@gmail.com</a>
+        <a href="https://www.linkedin.com/in/REPLACE-ME" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/scgriffith" target="_blank" rel="noopener">GitHub</a>
+        <a href="#">Tableau Public</a>
+        <p class="muted" style="font-size:.9rem; margin-top:12px;">Phone: (385) 301-7374</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    Sheila Griffith · Hosted on GitHub Pages
+  </div>
+</footer>
 
 </body>
 </html>
