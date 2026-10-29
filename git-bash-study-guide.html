@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Bash: An Interactive Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1419;
+    --bg-panel:#161b22;
+    --bg-panel-2:#1c2229;
+    --text:#e6edf3;
+    --text-dim:#8b949e;
+    --border:#2a313a;
+    --amber:#d29922;
+    --green:#3fb950;
+    --red:#f85149;
+    --blue:#58a6ff;
+    --purple:#bc8cff;
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    --sans:'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+  }
+  a{color:var(--blue);}
+
+  /* ---------- Layout ---------- */
+  .page{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 280px;
+    max-width:1180px;
+    margin:0 auto;
+    gap:0;
+  }
+  main{padding:0 clamp(20px,4vw,56px) 120px;min-width:0;}
+  aside.graph-rail{
+    position:sticky;
+    top:0;
+    height:100vh;
+    padding:32px 20px 32px 0;
+    border-left:1px solid var(--border);
+    overflow-y:auto;
+  }
+  @media (max-width:920px){
+    .page{grid-template-columns:1fr;}
+    aside.graph-rail{
+      position:static;
+      height:auto;
+      border-left:none;
+      border-top:1px solid var(--border);
+      padding:20px;
+    }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:64px 0 40px;
+    border-bottom:1px solid var(--border);
+  }
+  .hero .prompt-line{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--text-dim);
+    margin-bottom:14px;
+  }
+  .hero .prompt-line .user{color:var(--green);}
+  .hero .prompt-line .path{color:var(--blue);}
+  .hero h1{
+    font-size:clamp(32px,5vw,48px);
+    margin:0 0 14px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .hero p.lede{
+    font-size:17px;
+    color:var(--text-dim);
+    max-width:60ch;
+    margin:0 0 24px;
+  }
+  .hero .stat-row{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .hero .stat-row strong{color:var(--text);font-size:20px;display:block;font-family:var(--sans);}
+
+  /* ---------- Level dividers ---------- */
+  .level-divider{
+    margin:56px 0 28px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .level-divider .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--bg);
+    background:var(--amber);
+    padding:4px 10px;
+    border-radius:3px;
+    white-space:nowrap;
+    font-weight:600;
+  }
+  .level-divider .line{flex:1;height:1px;background:var(--border);}
+  .level-divider .desc{font-size:13px;color:var(--text-dim);}
+
+  /* ---------- Section (a "commit") ---------- */
+  .commit-section{
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--bg-panel);
+    margin-bottom:24px;
+    overflow:hidden;
+    scroll-margin-top:24px;
+  }
+  .commit-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
+    background:var(--bg-panel-2);
+    flex-wrap:wrap;
+  }
+  .commit-hash{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+  }
+  .commit-title{
+    font-size:17px;
+    font-weight:600;
+    margin:0;
+  }
+  .commit-status{
+    margin-left:auto;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    padding:2px 8px;
+    border-radius:12px;
+  }
+  .commit-section.done .commit-status{
+    color:var(--green);
+    border-color:var(--green);
+  }
+  .commit-body{padding:20px;}
+  .commit-body p{color:var(--text-dim);margin:0 0 14px;font-size:15px;}
+  .commit-body p strong{color:var(--text);}
+
+  code.inline{
+    font-family:var(--mono);
+    background:var(--bg-panel-2);
+    border:1px solid var(--border);
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:0.9em;
+    color:var(--blue);
+  }
+
+  .ref-block{
+    font-family:var(--mono);
+    font-size:13.5px;
+    background:#0a0e13;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:14px 16px;
+    margin:0 0 18px;
+    overflow-x:auto;
+    white-space:pre;
+  }
+  .ref-block .cmt{color:var(--text-dim);}
+  .ref-block .gitcmd{color:var(--green);}
+
+  /* ---------- Practice box ---------- */
+  .practice{
+    border:1px dashed var(--border);
+    border-radius:6px;
+    padding:16px 18px;
+    background:rgba(255,255,255,0.015);
+  }
+  .practice .label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--purple);
+    margin-bottom:8px;
+    display:block;
+  }
+  .practice .task{font-size:14.5px;margin-bottom:12px;}
+  .term-input-row{
+    display:flex;
+    align-items:center;
+    background:#0a0e13;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:8px 10px;
+    font-family:var(--mono);
+    gap:8px;
+  }
+  .term-input-row .caret{color:var(--green);flex-shrink:0;}
+  .term-input-row input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:14px;
+    min-width:0;
+  }
+  .practice-actions{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:600;
+    border-radius:6px;
+    padding:8px 14px;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--bg-panel-2);
+    color:var(--text);
+    transition:border-color .15s, color .15s;
+  }
+  button:hover{border-color:var(--text-dim);}
+  button.primary{background:var(--green);color:#0a1a0d;border-color:var(--green);}
+  button.primary:hover{filter:brightness(1.08);}
+  button.ghost{background:transparent;}
+
+  .feedback{
+    margin-top:12px;
+    font-size:14px;
+    padding:10px 12px;
+    border-radius:6px;
+    display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.ok{background:rgba(63,185,80,0.1);border:1px solid var(--green);color:#a6e3aa;}
+  .feedback.err{background:rgba(248,81,73,0.1);border:1px solid var(--red);color:#ff9691;}
+  .feedback.hint{background:rgba(210,153,34,0.1);border:1px solid var(--amber);color:#eac54f;display:block;margin-top:12px;}
+
+  .explain{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+    font-size:14.5px;
+    color:var(--text-dim);
+    display:none;
+  }
+  .explain.show{display:block;}
+  .explain strong{color:var(--text);}
+
+  textarea.term-textarea{
+    width:100%;
+    background:#0a0e13;
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:13.5px;
+    padding:12px;
+    min-height:110px;
+    resize:vertical;
+  }
+
+  /* ---------- Graph rail ---------- */
+  .rail-head{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:6px;
+  }
+  .rail-sub{font-size:12px;color:var(--text-dim);margin-bottom:20px;}
+  .graph-node{
+    position:relative;
+    padding-left:26px;
+    padding-bottom:22px;
+    font-family:var(--mono);
+    font-size:12px;
+  }
+  .graph-node::before{ /* the line */
+    content:"";
+    position:absolute;
+    left:7px;
+    top:14px;
+    bottom:-8px;
+    width:2px;
+    background:var(--border);
+  }
+  .graph-node:last-child::before{display:none;}
+  .graph-node::after{ /* the dot */
+    content:"";
+    position:absolute;
+    left:2px;
+    top:3px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--bg-panel-2);
+    border:2px solid var(--border);
+  }
+  .graph-node.pending{opacity:0.35;}
+  .graph-node.done::after{background:var(--green);border-color:var(--green);}
+  .graph-node.branch::after{background:var(--blue);border-color:var(--blue);}
+  .graph-node.merge::after{background:var(--purple);border-color:var(--purple);}
+  .graph-node .n-title{color:var(--text);font-weight:500;font-size:12.5px;}
+  .graph-node .n-hash{color:var(--text-dim);font-size:10.5px;}
+
+  .progress-track{
+    height:4px;
+    background:var(--bg-panel-2);
+    border-radius:2px;
+    margin-top:22px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--green),var(--blue));
+    transition:width .3s ease;
+  }
+  .progress-label{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:6px;}
+
+  footer{
+    text-align:center;
+    padding:40px 20px 60px;
+    color:var(--text-dim);
+    font-size:13px;
+    font-family:var(--mono);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+<main>
+
+  <div class="hero">
+    <div class="prompt-line"><span class="user">student@laptop</span>:<span class="path">~</span>$ <span id="typeTarget"></span><span style="opacity:.6">▌</span></div>
+    <h1>Git Bash, from first launch to first merge</h1>
+    <p class="lede">A hands-on walkthrough of Git — from opening the terminal for the very first time, through staging, committing, branching, and merging a feature branch into <code class="inline">main</code> on a remote server. Read each step, run it for real in your own Git Bash window, then prove it here.</p>
+    <div class="stat-row">
+      <div><strong id="statSections">14</strong>steps</div>
+      <div><strong>5</strong>levels</div>
+      <div><strong id="statDone">0</strong>completed</div>
+    </div>
+  </div>
+
+  <!-- ============ LEVEL 1 ============ -->
+  <div class="level-divider">
+    <span class="tag">Level 1</span>
+    <div class="line"></div>
+    <span class="desc">Getting oriented — no Git yet, just the terminal</span>
+  </div>
+
+  <section class="commit-section" id="sec1" data-hash="4a1f9c2">
+    <div class="commit-head">
+      <span class="commit-hash">4a1f9c2</span>
+      <h2 class="commit-title">Opening Git Bash</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Git Bash is a terminal application: a window where you type commands instead of clicking icons. On Windows, open it from the Start menu after installing <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git for Windows</a>. On macOS or Linux, your regular Terminal app already speaks the same language.</p>
+      <p>When it opens, you'll see a <strong>prompt</strong> — something like <code class="inline">student@laptop MINGW64 ~$</code> — waiting for input. That dollar sign is Git Bash saying "I'm listening."</p>
+      <div class="ref-block"><span class="cmt"># check that Git is installed and see its version</span>
+<span class="gitcmd">git --version</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Type the command that checks which version of Git is installed.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input1" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(1)">Run</button>
+          <button class="ghost" onclick="showHint(1)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback1"></div>
+      </div>
+      <div class="explain" id="explain1"><strong>Why it matters:</strong> <code class="inline">git --version</code> is a safe, read-only command — a good first thing to type in any new terminal. It confirms Git exists before you try to use it.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec2" data-hash="7b3e0d1">
+    <div class="commit-head">
+      <span class="commit-hash">7b3e0d1</span>
+      <h2 class="commit-title">Finding your way around</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Before Git, you need basic navigation. <code class="inline">pwd</code> (print working directory) shows where you are. <code class="inline">ls</code> lists what's there. <code class="inline">cd</code> moves you. <code class="inline">mkdir</code> makes a new folder.</p>
+      <div class="ref-block"><span class="cmt"># where am I?</span>
+<span class="gitcmd">pwd</span>
+<span class="cmt"># move into a folder called Documents</span>
+<span class="gitcmd">cd Documents</span>
+<span class="cmt"># make a new folder</span>
+<span class="gitcmd">mkdir my-project</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Type the command that lists files in the current folder <strong>including hidden files</strong> (the ones starting with a dot, like <code class="inline">.git</code>).</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input2" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(2)">Run</button>
+          <button class="ghost" onclick="showHint(2)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback2"></div>
+      </div>
+      <div class="explain" id="explain2"><strong>Why it matters:</strong> hidden files matter constantly in Git — the entire repository lives inside a hidden <code class="inline">.git</code> folder. A plain <code class="inline">ls</code> won't show it; <code class="inline">ls -a</code> (or <code class="inline">-la</code> for details too) will.</div>
+    </div>
+  </section>
+
+  <!-- ============ LEVEL 2 ============ -->
+  <div class="level-divider">
+    <span class="tag">Level 2</span>
+    <div class="line"></div>
+    <span class="desc">Telling Git who you are, then starting a repository</span>
+  </div>
+
+  <section class="commit-section" id="sec3" data-hash="9c4a2f8">
+    <div class="commit-head">
+      <span class="commit-hash">9c4a2f8</span>
+      <h2 class="commit-title">Configuring Git</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Every commit you ever make gets signed with a name and email. You only set this once per computer, using <code class="inline">--global</code>.</p>
+      <div class="ref-block"><span class="cmt"># set your name</span>
+<span class="gitcmd">git config --global user.name "Your Name"</span>
+<span class="cmt"># set your email</span>
+<span class="gitcmd">git config --global user.email "you@example.com"</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Set your Git username to <code class="inline">Ada Lovelace</code>.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input3" placeholder='git config --global user.name "…"' autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(3)">Run</button>
+          <button class="ghost" onclick="showHint(3)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback3"></div>
+      </div>
+      <div class="explain" id="explain3"><strong>Why it matters:</strong> this name and email get permanently baked into every commit's metadata. On a shared or school computer, always double-check whose identity is set before committing.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec4" data-hash="e1d7b3a">
+    <div class="commit-head">
+      <span class="commit-hash">e1d7b3a</span>
+      <h2 class="commit-title">Initializing a repository</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p><code class="inline">git init</code> turns the current folder into a Git repository by creating that hidden <code class="inline">.git</code> folder you saw earlier. Nothing is tracked yet — it just switches Git "on" for this folder.</p>
+      <div class="ref-block"><span class="cmt"># inside your project folder</span>
+<span class="gitcmd">git init</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Initialize a brand-new Git repository in the current folder.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input4" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(4)">Run</button>
+          <button class="ghost" onclick="showHint(4)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback4"></div>
+      </div>
+      <div class="explain" id="explain4"><strong>Why it matters:</strong> you only run <code class="inline">git init</code> once per project — right at the start. Running it again later is harmless but pointless; the repo already exists.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec5" data-hash="2f8c9e4">
+    <div class="commit-head">
+      <span class="commit-hash">2f8c9e4</span>
+      <h2 class="commit-title">Staging changes</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Git tracks changes in two stops before they're permanent: your <strong>working folder</strong> → the <strong>staging area</strong> → a <strong>commit</strong>. <code class="inline">git add</code> moves changes into staging — think of it as loading items into a box before sealing it.</p>
+      <div class="ref-block"><span class="cmt"># check what's changed</span>
+<span class="gitcmd">git status</span>
+<span class="cmt"># stage one file</span>
+<span class="gitcmd">git add notes.txt</span>
+<span class="cmt"># or stage everything that changed</span>
+<span class="gitcmd">git add .</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">You just created <code class="inline">notes.txt</code>. Stage <strong>all</strong> changed files in the folder in one command.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input5" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(5)">Run</button>
+          <button class="ghost" onclick="showHint(5)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback5"></div>
+      </div>
+      <div class="explain" id="explain5"><strong>Why it matters:</strong> staging lets you build a commit out of only the changes you actually want to save — you don't have to commit everything you've touched at once.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec6" data-hash="6a3d1f7">
+    <div class="commit-head">
+      <span class="commit-hash">6a3d1f7</span>
+      <h2 class="commit-title">Committing</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>A commit seals whatever is staged into a permanent snapshot, with a message explaining what changed. Good commit messages are short, present-tense, and specific.</p>
+      <div class="ref-block"><span class="cmt"># commit staged changes with a message</span>
+<span class="gitcmd">git commit -m "Add initial notes"</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Commit your staged changes with the message <code class="inline">Add notes</code>.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input6" placeholder='git commit -m "…"' autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(6)">Run</button>
+          <button class="ghost" onclick="showHint(6)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback6"></div>
+      </div>
+      <div class="explain" id="explain6"><strong>Why it matters:</strong> commits are the atoms of Git history. Every branch, merge, and rollback ultimately points at commits like this one.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec7" data-hash="b9e4c2d">
+    <div class="commit-head">
+      <span class="commit-hash">b9e4c2d</span>
+      <h2 class="commit-title">Reading history</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p><code class="inline">git log</code> shows the commit history. The full version is verbose; <code class="inline">--oneline</code> compresses each commit to one line — hash + message.</p>
+      <div class="ref-block"><span class="cmt"># full history</span>
+<span class="gitcmd">git log</span>
+<span class="cmt"># compact history</span>
+<span class="gitcmd">git log --oneline</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">View a compact, one-line-per-commit history.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input7" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(7)">Run</button>
+          <button class="ghost" onclick="showHint(7)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback7"></div>
+      </div>
+      <div class="explain" id="explain7"><strong>Why it matters:</strong> that short 7-character hash next to each commit (like the ones labeling every section on this page) is how Git uniquely refers to a snapshot — for checkouts, resets, or merges.</div>
+    </div>
+  </section>
+
+  <!-- ============ LEVEL 3 ============ -->
+  <div class="level-divider">
+    <span class="tag">Level 3</span>
+    <div class="line"></div>
+    <span class="desc">Branching out and bringing work back together</span>
+  </div>
+
+  <section class="commit-section" id="sec8" data-hash="3d7f1a9">
+    <div class="commit-head">
+      <span class="commit-hash">3d7f1a9</span>
+      <h2 class="commit-title">Creating a branch</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>A branch is a parallel line of history — a safe place to try something without touching <code class="inline">main</code>. <code class="inline">git switch -c</code> (or the older <code class="inline">git checkout -b</code>) creates a branch and moves you onto it in one step.</p>
+      <div class="ref-block"><span class="cmt"># create and switch to a new branch</span>
+<span class="gitcmd">git switch -c feature-login</span>
+<span class="cmt"># see all branches, * marks the current one</span>
+<span class="gitcmd">git branch</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Create a new branch called <code class="inline">feature-login</code> and switch to it, in one command.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input8" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(8)">Run</button>
+          <button class="ghost" onclick="showHint(8)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback8"></div>
+      </div>
+      <div class="explain" id="explain8"><strong>Why it matters:</strong> branches are cheap and disposable in Git — that's the whole point. Real teams branch for every feature or fix so <code class="inline">main</code> always stays stable.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec9" data-hash="8c2e5b6">
+    <div class="commit-head">
+      <span class="commit-hash">8c2e5b6</span>
+      <h2 class="commit-title">Merging locally</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Once work on a branch is finished, you bring it into another branch with <code class="inline">git merge</code>. You run merge <em>from</em> the branch that should <em>receive</em> the changes.</p>
+      <div class="ref-block"><span class="cmt"># go back to main first</span>
+<span class="gitcmd">git switch main</span>
+<span class="cmt"># merge feature-login into main</span>
+<span class="gitcmd">git merge feature-login</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">You're already on <code class="inline">main</code>. Merge the <code class="inline">feature-login</code> branch into it.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input9" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(9)">Run</button>
+          <button class="ghost" onclick="showHint(9)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback9"></div>
+      </div>
+      <div class="explain" id="explain9"><strong>Why it matters:</strong> merging is directional. <code class="inline">git merge feature-login</code> while standing on <code class="inline">main</code> pulls feature-login's work in — it does not push main's work out to the feature branch.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec10" data-hash="f4a9d3c">
+    <div class="commit-head">
+      <span class="commit-hash">f4a9d3c</span>
+      <h2 class="commit-title">Resolving a conflict</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>If both branches changed the <em>same lines</em>, Git can't guess which version you want and marks a <strong>conflict</strong> directly in the file with <code class="inline">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code class="inline">=======</code> / <code class="inline">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers. You edit the file to keep what you want, delete the markers, then stage and commit it like a normal change.</p>
+      <div class="ref-block"><span class="cmt"># after editing the conflicted file by hand</span>
+<span class="gitcmd">git add resolved-file.txt</span>
+<span class="cmt"># finish the merge</span>
+<span class="gitcmd">git commit</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">You've just hand-edited <code class="inline">index.html</code> to fix a conflict. Stage that file to mark it resolved.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input10" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(10)">Run</button>
+          <button class="ghost" onclick="showHint(10)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback10"></div>
+      </div>
+      <div class="explain" id="explain10"><strong>Why it matters:</strong> a conflict isn't an error you failed to avoid — it's Git correctly refusing to guess. Staging the fixed file tells Git "I've decided," and a plain <code class="inline">git commit</code> (no <code class="inline">-m</code> needed) completes the merge.</div>
+    </div>
+  </section>
+
+  <!-- ============ LEVEL 4 ============ -->
+  <div class="level-divider">
+    <span class="tag">Level 4</span>
+    <div class="line"></div>
+    <span class="desc">Going remote — connecting to GitHub</span>
+  </div>
+
+  <section class="commit-section" id="sec11" data-hash="1e6b8f2">
+    <div class="commit-head">
+      <span class="commit-hash">1e6b8f2</span>
+      <h2 class="commit-title">Connecting to a remote</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>Everything so far has been <em>local</em> — living only on your machine. A <strong>remote</strong> is a copy of the repository hosted elsewhere, like GitHub. <code class="inline">origin</code> is just the conventional nickname for your main remote.</p>
+      <div class="ref-block"><span class="cmt"># link a GitHub repo as "origin"</span>
+<span class="gitcmd">git remote add origin https://github.com/yourname/your-repo.git</span>
+<span class="cmt"># confirm it's linked</span>
+<span class="gitcmd">git remote -v</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Link your local repo to <code class="inline">https://github.com/adalovelace/notes.git</code> as <code class="inline">origin</code>.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input11" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(11)">Run</button>
+          <button class="ghost" onclick="showHint(11)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback11"></div>
+      </div>
+      <div class="explain" id="explain11"><strong>Why it matters:</strong> your local commits stay local until you explicitly connect and push to a remote. Nothing is uploaded automatically.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec12" data-hash="5d3a7c9">
+    <div class="commit-head">
+      <span class="commit-hash">5d3a7c9</span>
+      <h2 class="commit-title">Pushing to the remote</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p><code class="inline">git push</code> uploads your local commits to the remote. The first time you push a branch, add <code class="inline">-u</code> to set it as the branch's default upstream — after that, plain <code class="inline">git push</code> is enough.</p>
+      <div class="ref-block"><span class="cmt"># first push: set upstream too</span>
+<span class="gitcmd">git push -u origin main</span>
+<span class="cmt"># every push after that</span>
+<span class="gitcmd">git push</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">Push your local <code class="inline">main</code> branch to <code class="inline">origin</code> for the very first time, setting it as upstream.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input12" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(12)">Run</button>
+          <button class="ghost" onclick="showHint(12)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback12"></div>
+      </div>
+      <div class="explain" id="explain12"><strong>Why it matters:</strong> <code class="inline">-u</code> (short for <code class="inline">--set-upstream</code>) links your local <code class="inline">main</code> to <code class="inline">origin/main</code> permanently, so future pushes and pulls know where to go without you repeating the branch name.</div>
+    </div>
+  </section>
+
+  <section class="commit-section" id="sec13" data-hash="a2f4e8b">
+    <div class="commit-head">
+      <span class="commit-hash">a2f4e8b</span>
+      <h2 class="commit-title">Cloning &amp; pulling</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p><code class="inline">git clone</code> downloads an entire remote repository for the first time, complete with history. <code class="inline">git pull</code> updates a repo you already have, fetching and merging any new commits from the remote.</p>
+      <div class="ref-block"><span class="cmt"># download a repo for the first time</span>
+<span class="gitcmd">git clone https://github.com/adalovelace/notes.git</span>
+<span class="cmt"># update an existing local repo</span>
+<span class="gitcmd">git pull origin main</span></div>
+      <div class="practice">
+        <span class="label">Your turn</span>
+        <p class="task">You already have this repo locally. Pull the latest changes from <code class="inline">main</code> on <code class="inline">origin</code>.</p>
+        <div class="term-input-row">
+          <span class="caret">$</span>
+          <input type="text" id="input13" placeholder="type a command…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(13)">Run</button>
+          <button class="ghost" onclick="showHint(13)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback13"></div>
+      </div>
+      <div class="explain" id="explain13"><strong>Why it matters:</strong> pull before you start new work, every time. It's the single most common habit that prevents avoidable conflicts with teammates.</div>
+    </div>
+  </section>
+
+  <!-- ============ LEVEL 5 ============ -->
+  <div class="level-divider">
+    <span class="tag">Level 5 · Capstone</span>
+    <div class="line"></div>
+    <span class="desc">The whole workflow, start to finish</span>
+  </div>
+
+  <section class="commit-section" id="sec14" data-hash="7f1c9d3">
+    <div class="commit-head">
+      <span class="commit-hash">7f1c9d3</span>
+      <h2 class="commit-title">Full feature workflow: branch → commit → push → merge to main</h2>
+      <span class="commit-status">not started</span>
+    </div>
+    <div class="commit-body">
+      <p>This is the workflow real teams use daily. Every step below is one you've already practiced — the only thing new is doing them in sequence.</p>
+      <div class="ref-block"><span class="cmt">1. branch off main for your feature</span>
+<span class="gitcmd">git switch -c feature-navbar</span>
+<span class="cmt">2. do your work, then stage and commit it</span>
+<span class="gitcmd">git add .</span>
+<span class="gitcmd">git commit -m "Add responsive navbar"</span>
+<span class="cmt">3. push the feature branch to GitHub</span>
+<span class="gitcmd">git push -u origin feature-navbar</span>
+<span class="cmt">4. on GitHub: open a Pull Request, review, then merge it into main
+   (or, working locally instead of via a PR:)</span>
+<span class="gitcmd">git switch main</span>
+<span class="gitcmd">git pull origin main</span>
+<span class="gitcmd">git merge feature-navbar</span>
+<span class="gitcmd">git push origin main</span></div>
+      <div class="practice">
+        <span class="label">Your turn — type the sequence</span>
+        <p class="task">Write the commands, one per line, to: create+switch to a branch called <code class="inline">feature-navbar</code>, stage everything, commit it with message <code class="inline">Add responsive navbar</code>, and push that branch to origin with upstream tracking set.</p>
+        <textarea class="term-textarea" id="input14" placeholder="git switch -c feature-navbar
+git add .
+git commit -m &quot;…&quot;
+git push -u origin feature-navbar"></textarea>
+        <div class="practice-actions">
+          <button class="primary" onclick="checkAnswer(14)">Run sequence</button>
+          <button class="ghost" onclick="showHint(14)">Hint</button>
+        </div>
+        <div class="feedback" id="feedback14"></div>
+      </div>
+      <div class="explain" id="explain14"><strong>Why it matters:</strong> this loop — branch, commit, push, merge to main — is the daily rhythm of working with Git and GitHub on a team. Once this feels automatic, you know Git.</div>
+    </div>
+  </section>
+
+  <p style="text-align:center;color:var(--text-dim);font-size:14px;margin-top:40px;" id="completionMsg"></p>
+
+</main>
+
+<aside class="graph-rail">
+  <div class="rail-head">Your commit graph</div>
+  <div class="rail-sub">Fills in as you complete each step below.</div>
+  <div id="graphList"></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 14 steps complete</div>
+</aside>
+</div>
+
+<footer>built with git · reset progress: <button class="ghost" style="padding:4px 10px;font-size:12px;" onclick="resetProgress()">clear saved progress</button></footer>
+
+<script>
+const SECTIONS = [
+  {id:1, hash:'4a1f9c2', title:'Opening Git Bash', type:'done',
+   test:s=>s==='git --version',
+   hint:'It starts with git, and asks for the --version flag.'},
+  {id:2, hash:'7b3e0d1', title:'Finding your way around', type:'done',
+   test:s=>/^ls\s+(-la|-al|-a\s+-l|-l\s+-a|-a)$/.test(s),
+   hint:'ls with a flag that shows hidden (dotfile) entries — try -a, or -la for details too.'},
+  {id:3, hash:'9c4a2f8', title:'Configuring Git', type:'done',
+   test:s=>/^git config --global user\.name "?ada lovelace"?$/.test(s.toLowerCase()),
+   hint:'git config --global user.name "Ada Lovelace" — keep the quotes around the full name.'},
+  {id:4, hash:'e1d7b3a', title:'Initializing a repository', type:'done',
+   test:s=>s==='git init',
+   hint:'Just two words: git init.'},
+  {id:5, hash:'2f8c9e4', title:'Staging changes', type:'done',
+   test:s=>/^git add (\.|-a|--all)$/.test(s.toLowerCase()),
+   hint:'git add followed by a dot stages everything in the current folder.'},
+  {id:6, hash:'6a3d1f7', title:'Committing', type:'done',
+   test:s=>/^git commit -m "?add notes"?$/.test(s.toLowerCase()),
+   hint:'git commit -m "Add notes" — message goes in quotes after -m.'},
+  {id:7, hash:'b9e4c2d', title:'Reading history', type:'done',
+   test:s=>s==='git log --oneline',
+   hint:'git log, plus the --oneline flag for the compact view.'},
+  {id:8, hash:'3d7f1a9', title:'Creating a branch', type:'branch',
+   test:s=>/^git (switch -c|checkout -b) feature-login$/.test(s.toLowerCase()),
+   hint:'git switch -c feature-login (or git checkout -b feature-login).'},
+  {id:9, hash:'8c2e5b6', title:'Merging locally', type:'merge',
+   test:s=>s==='git merge feature-login',
+   hint:'git merge, then the name of the branch you want pulled in: feature-login.'},
+  {id:10, hash:'f4a9d3c', title:'Resolving a conflict', type:'done',
+   test:s=>/^git add (index\.html|\.)$/.test(s.toLowerCase()),
+   hint:'git add index.html — stage the exact file you fixed.'},
+  {id:11, hash:'1e6b8f2', title:'Connecting to a remote', type:'done',
+   test:s=>/^git remote add origin https:\/\/github\.com\/adalovelace\/notes\.git$/.test(s.toLowerCase()),
+   hint:'git remote add origin, then the exact URL given above.'},
+  {id:12, hash:'5d3a7c9', title:'Pushing to the remote', type:'done',
+   test:s=>s==='git push -u origin main',
+   hint:'git push, the -u flag, then origin main.'},
+  {id:13, hash:'a2f4e8b', title:'Cloning & pulling', type:'done',
+   test:s=>s==='git pull origin main',
+   hint:'git pull origin main.'},
+  {id:14, hash:'7f1c9d3', title:'Full feature workflow', type:'merge',
+   test:s=>{
+     const l = s.toLowerCase();
+     return /git (switch -c|checkout -b) feature-navbar/.test(l) &&
+            /git add (\.|-a)/.test(l) &&
+            /git commit -m "?add responsive navbar"?/.test(l) &&
+            /git push -u origin feature-navbar/.test(l);
+   },
+   hint:'Four lines: create+switch the branch, add ., commit -m "Add responsive navbar", then push -u origin feature-navbar.'},
+];
+
+const STORAGE_KEY = 'git-bash-guide-progress-v1';
+let completed = new Set();
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  completed = new Set(saved);
+} catch(e) { completed = new Set(); }
+
+function saveProgress(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed])); } catch(e) {}
+}
+
+function normalize(str){
+  return str.trim().replace(/\s+/g,' ');
+}
+
+function checkAnswer(id){
+  const cfg = SECTIONS.find(s=>s.id===id);
+  const el = document.getElementById('input'+id);
+  const fb = document.getElementById('feedback'+id);
+  const raw = el.tagName === 'TEXTAREA' ? el.value : normalize(el.value);
+  if(!raw.trim()){
+    fb.className = 'feedback err show';
+    fb.textContent = 'Type a command first — even a guess is fine.';
+    return;
+  }
+  const pass = cfg.test(raw);
+  if(pass){
+    fb.className = 'feedback ok show';
+    fb.textContent = '✓ Correct — that\'s exactly the command for this step.';
+    markDone(id, cfg);
+  } else {
+    fb.className = 'feedback err show';
+    fb.textContent = '✗ Not quite. Check the reference command above and try again, or tap Hint.';
+  }
+}
+
+function showHint(id){
+  const cfg = SECTIONS.find(s=>s.id===id);
+  const fb = document.getElementById('feedback'+id);
+  fb.className = 'feedback hint';
+  fb.textContent = '💡 ' + cfg.hint;
+}
+
+function markDone(id, cfg){
+  if(completed.has(id)) { renderAll(); return; }
+  completed.add(id);
+  saveProgress();
+  const section = document.getElementById('sec'+id);
+  section.classList.add('done');
+  section.querySelector('.commit-status').textContent = 'complete';
+  document.getElementById('explain'+id).classList.add('show');
+  renderAll();
+}
+
+function renderAll(){
+  // graph rail
+  const graphList = document.getElementById('graphList');
+  graphList.innerHTML = '';
+  SECTIONS.forEach(s=>{
+    const done = completed.has(s.id);
+    const div = document.createElement('div');
+    div.className = 'graph-node ' + (done ? ('done ' + (s.type==='branch'?'branch':s.type==='merge'?'merge':'')) : 'pending');
+    div.innerHTML = '<div class="n-title">'+s.title+'</div><div class="n-hash">'+s.hash+(done?' · done':'')+'</div>';
+    graphList.appendChild(div);
+  });
+  // sync existing done sections on load
+  SECTIONS.forEach(s=>{
+    if(completed.has(s.id)){
+      const section = document.getElementById('sec'+s.id);
+      if(section){
+        section.classList.add('done');
+        section.querySelector('.commit-status').textContent = 'complete';
+        const ex = document.getElementById('explain'+s.id);
+        if(ex) ex.classList.add('show');
+      }
+    }
+  });
+  const pct = Math.round((completed.size / SECTIONS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = completed.size + ' / ' + SECTIONS.length + ' steps complete';
+  document.getElementById('statDone').textContent = completed.size;
+  const msg = document.getElementById('completionMsg');
+  if(completed.size === SECTIONS.length){
+    msg.textContent = '🎉 All 14 steps complete — you\'ve run the full workflow from git --version to merging a feature branch into main on a remote. Nice work.';
+  } else {
+    msg.textContent = '';
+  }
+}
+
+function resetProgress(){
+  if(!confirm('Clear all saved progress on this guide?')) return;
+  completed = new Set();
+  saveProgress();
+  document.querySelectorAll('.commit-section').forEach(s=>{
+    s.classList.remove('done');
+    s.querySelector('.commit-status').textContent = 'not started';
+  });
+  document.querySelectorAll('.explain').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.feedback').forEach(e=>{e.className='feedback';e.textContent='';});
+  document.querySelectorAll('input[id^="input"]').forEach(i=>i.value='');
+  document.getElementById('input14').value='';
+  renderAll();
+}
+
+// allow Enter key to submit
+document.querySelectorAll('.term-input-row input').forEach(input=>{
+  input.addEventListener('keydown', e=>{
+    if(e.key === 'Enter'){
+      const id = parseInt(input.id.replace('input',''));
+      checkAnswer(id);
+    }
+  });
+});
+
+// hero typewriter
+const typeTarget = document.getElementById('typeTarget');
+const phrase = 'git log --oneline --graph --all';
+let i = 0;
+function typeLoop(){
+  if(i <= phrase.length){
+    typeTarget.textContent = phrase.slice(0,i);
+    i++;
+    setTimeout(typeLoop, 55);
+  }
+}
+typeLoop();
+
+renderAll();
+</script>
+
+</body>
+</html>
